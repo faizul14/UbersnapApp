@@ -13,6 +13,7 @@ class LocalDataSource @Inject constructor(private val taskDao: TaskDao) {
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
     fun getListTast(): LiveData<List<TaskEntity>> = taskDao.getListTask()
+    fun getTaskById(id: Int): LiveData<TaskEntity> = taskDao.getTaskById(id)
     fun addTad(task: TaskEntity){
         executorService.execute{
             taskDao.addTask(task)

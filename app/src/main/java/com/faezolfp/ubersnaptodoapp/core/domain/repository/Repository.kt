@@ -8,6 +8,7 @@ interface Repository {
     fun example(): ExampleModel
 
     fun getListTask(): LiveData<List<TaskModel>>
+    fun getTaskById(id: Int): LiveData<TaskModel>
     fun addTask(task: TaskModel)
     fun updateTask(task: TaskModel)
     fun deleteTask(task: TaskModel)

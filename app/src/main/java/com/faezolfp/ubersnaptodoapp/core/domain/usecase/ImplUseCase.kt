@@ -17,6 +17,10 @@ class ImplUseCase @Inject constructor(private val repository: Repository) : UseC
         return repository.getListTask()
     }
 
+    override fun getTaskById(id: Int): LiveData<TaskModel> {
+        return repository.getTaskById(id)
+    }
+
     override fun addTask(task: TaskModel) {
         repository.addTask(task)
     }

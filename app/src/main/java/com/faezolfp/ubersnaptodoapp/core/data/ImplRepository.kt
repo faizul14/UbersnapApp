@@ -23,6 +23,12 @@ class ImplRepository @Inject constructor(private val localDataSource: LocalDataS
         }
     }
 
+    override fun getTaskById(id: Int): LiveData<TaskModel> {
+        return localDataSource.getTaskById(id).map {
+            DataMapper.mapperTaskFromDataToDomain(it)
+        }
+    }
+
     override fun addTask(task: TaskModel) {
         localDataSource.addTad(DataMapper.mapperTaskFromDomainToData(task))
     }

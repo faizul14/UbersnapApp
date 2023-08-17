@@ -19,5 +19,7 @@ interface TaskDao {
     fun deleteTask(task: TaskEntity)
     @Query("SELECT * FROM taskentity")
     fun getListTask(): LiveData<List<TaskEntity>>
+    @Query("SELECT * FROM taskentity WHERE id = :id")
+    fun getTaskById(id: Int): LiveData<TaskEntity>
 
 }

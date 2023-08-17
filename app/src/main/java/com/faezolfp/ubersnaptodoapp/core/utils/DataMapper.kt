@@ -35,5 +35,13 @@ object DataMapper {
         )
     }
 
+    fun mapperTaskFromDataToDomain(input: TaskEntity): TaskModel{
+        return TaskModel(
+            id = input.id,
+            tittle = input.tittle,
+            description = input.description,
+            date = input.date)
+    }
+
 
 }

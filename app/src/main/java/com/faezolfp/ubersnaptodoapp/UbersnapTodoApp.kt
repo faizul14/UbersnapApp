@@ -1,5 +1,6 @@
 package com.faezolfp.ubersnaptodoapp
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,38 +17,47 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.faezolfp.ubersnaptodoapp.ui.navigation.Screen
 import com.faezolfp.ubersnaptodoapp.ui.screen.addtask.AddTaskScreen
+import com.faezolfp.ubersnaptodoapp.ui.screen.detailtask.DetailTaskScreen
 import com.faezolfp.ubersnaptodoapp.ui.screen.home.HomeScreen
 import com.faezolfp.ubersnaptodoapp.ui.theme.UbersnapTodoAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UbersnapTodoApp(
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    Scaffold (
-        floatingActionButton = {
-            if (currentRoute != Screen.Addtask.route){
-                Button(onClick = { navController.navigate(Screen.Addtask.route) }) {
-                    Text(text = "ClickMee")
-                }
+    Scaffold(floatingActionButton = {
+        if (currentRoute != Screen.Addtask.route && currentRoute != Screen.DetailTask.route) {
+            Button(onClick = { navController.navigate(Screen.Addtask.route) }) {
+                Text(text = "ClickMee")
             }
         }
-    ){it
+    }) {
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
             modifier = modifier.padding(it)
-        ){
-            composable(Screen.Home.route){
-                HomeScreen(navigateToDetail = {}, navigateToAddTask = { navController.navigate(Screen.Addtask.route)})
+        ) {
+            composable(Screen.Home.route) {
+                HomeScreen(
+                    navigateToDetail = { idTask ->
+                        navController.navigate(Screen.DetailTask.createRoute(idTask = idTask))
+                    },
+                    navigateToAddTask = { navController.navigate(Screen.Addtask.route) }
+                )
             }
-            composable(Screen.Addtask.route){
+            composable(Screen.Addtask.route) {
                 AddTaskScreen(onTaskAdded = {
                     navController.navigateUp()
                 })
+            }
+            composable(
+                route = Screen.DetailTask.route,
+            ) { idTaskReceive ->
+                val idTask = idTaskReceive.arguments?.getString("idTask")?.toInt()
+                idTask?.let { it1 -> DetailTaskScreen(idTask = it1, navigateBack = {}) }
             }
         }
     }

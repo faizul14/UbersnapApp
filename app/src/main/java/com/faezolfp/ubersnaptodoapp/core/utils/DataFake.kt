@@ -18,4 +18,8 @@ object DataFake {
         return dataResult
     }
 
+    fun dataTaskFake() = TaskModel(
+        id = 0, tittle = "tittle 1", description = "Lorem Ipsum Doolor Is Amet", date = "27 August 2023"
+
+    )
 }

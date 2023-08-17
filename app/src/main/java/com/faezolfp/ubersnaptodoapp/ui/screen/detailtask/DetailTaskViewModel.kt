@@ -1,4 +1,4 @@
-package com.faezolfp.ubersnaptodoapp.ui.screen.home
+package com.faezolfp.ubersnaptodoapp.ui.screen.detailtask
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
@@ -10,24 +10,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeVieModel @Inject constructor(private val useCase: UseCase): ViewModel() {
-    private val _uiState: MutableStateFlow<UiState<List<TaskModel>>> = MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState<List<TaskModel>>>
+class DetailTaskViewModel @Inject constructor(private val useCase: UseCase) : ViewModel() {
+    private val _uiState: MutableStateFlow<UiState<TaskModel>> = MutableStateFlow(UiState.Loading)
+    val uiState: StateFlow<UiState<TaskModel>>
         get() = _uiState
 
-    fun getTaskList() {
+    fun getTaskById(id: Int) {
         viewModelScope.launch {
-            useCase.getListTask().asFlow()
+            useCase.getTaskById(id).asFlow()
                 .catch {
                     _uiState.value = UiState.Error(it.message.toString())
-                }
-                .collect{taskList->
-                    _uiState.value = UiState.Success(taskList)
+                }.collect {
+                    _uiState.value = UiState.Success(it)
                 }
         }
     }

@@ -1,5 +1,6 @@
 package com.faezolfp.ubersnaptodoapp.ui.screen.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +38,7 @@ fun HomeScreen(
                 vieModel.getTaskList()
             }
             is UiState.Success ->{
-                HomeContent(dataListTask = uiState.data , navigateToDetail = {} )
+                HomeContent(dataListTask = uiState.data , navigateToDetail = navigateToDetail )
             }
             is UiState.Error -> {}
         }
@@ -55,7 +56,14 @@ fun HomeContent(
         modifier = modifier
     ){
         items(dataListTask){
-            TaskItem(tittle = it.tittle.toString(), description = it.description.toString(), date = it.date.toString())
+            TaskItem(
+                tittle = it.tittle.toString(),
+                description = it.description.toString(),
+                date = it.date.toString(),
+                modifier = modifier.clickable {
+                    navigateToDetail(it.id)
+                }
+            )
         }
     }
 }
